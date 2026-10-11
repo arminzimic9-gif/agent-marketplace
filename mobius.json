@@ -1,0 +1,174 @@
+{
+  "id": "agent-marketplace",
+  "name": "Agent Marketplace",
+  "version": "0.7.0",
+  "description": "Hire AI agents that remember what you teach them and can pass their experience on: versioned, replay-checked rulebooks, portable experience packages, real tools and owner-confirmed runs.",
+  "entry": "index.jsx",
+  "icon": "icon.png",
+  "offline_capable": false,
+  "permissions": {},
+  "service": {
+    "id": "agent-marketplace",
+    "entry": "service.py",
+    "access": "self"
+  },
+  "system_prompt": "marketplace-mentions.md",
+  "tools": [
+    {
+      "name": "request_agent",
+      "description": "When the owner explicitly asks for an enabled Agent Marketplace @handle, create an unpaid request for that installed agent. This never starts a provider run; the owner must review cost and permissions in Marketplace Activity. For Sentinel include an explicitly selected installed app, public Store repository, or pasted code and optional bug report; for Design Critic include an installed app, public https URL, or pasted HTML/CSS (as code) and an optional focus; for Bug Triage include reports (pasted text) with source_kind text or social and an optional app_id; for Launch Writer include an installed app_id or a description; for SEO Scout include a public https url or pasted HTML (as code); for Brief Builder include the client message; for Researcher include a topic; for custom agents include a task. Do not call for incidental mentions.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "description": "Installed agent slug without @."
+          },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "installed",
+              "store_repo",
+              "code",
+              "url",
+              "html",
+              "text",
+              "social",
+              "description"
+            ]
+          },
+          "app_id": {
+            "type": "integer"
+          },
+          "repo_url": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "focus": {
+            "type": "string"
+          },
+          "reports": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "bug_report": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ]
+      }
+    }
+  ],
+  "schedule": {
+    "job": "job.sh",
+    "user_configurable": true
+  },
+  "source_files": [
+    "domain.mjs",
+    "theme.js",
+    "agent.json",
+    "agent.schema.json",
+    "test-domain.mjs",
+    "researcher.json",
+    "critic.json",
+    "critic.playbook.md",
+    "bug-triage.json",
+    "bug-triage.playbook.md",
+    "launch-writer.json",
+    "launch-writer.playbook.md",
+    "seo-scout.json",
+    "seo-scout.playbook.md",
+    "brief-builder.json",
+    "recruiter.json",
+    "recruiter.playbook.md",
+    "recruiter-demo.json",
+    "learning.py",
+    "experience.py",
+    "experience.jsx",
+    "experience-theme.js",
+    "recruiter.jsx",
+    "recruiter-theme.js",
+    "reply.jsx",
+    "reply-theme.js",
+    "brief-builder.playbook.md",
+    "markdown.jsx",
+    "sprites.js",
+    "characters.jsx",
+    "partyhero.jsx",
+    "fonts.js",
+    "FONTS-LICENSE.txt",
+    "sentinel.playbook.md",
+    "researcher.playbook.md",
+    "runtime.py",
+    "service.py",
+    "runner.py",
+    "test_runtime.py",
+    "test_learning.py",
+    "test_experience.py",
+    "marketplace-mentions.md",
+    "agent_tools.py",
+    "agent-theme.js",
+    "guild-state.mjs",
+    "guild-theme.js",
+    "guild.jsx",
+    "test-guild.mjs",
+    "test_agent_tools.py",
+    "test_trigger_requests.py",
+    "knowledge.py",
+    "reflection.py",
+    "learned.jsx",
+    "learned-theme.js",
+    "test_reflection.py"
+  ],
+  "store": {
+    "tagline": "Hire agents that remember — and pass their experience on.",
+    "description": "Agents that learn. After every completed run an agent reflects on what worked, what failed and the feedback you gave it, and updates its rulebook automatically, but only when a replay over your earlier ratings shows nothing gets worse. Every run ends with a \"What I learned\" report: new, changed or removed rules with the reason, or an explicit \"nothing new learned\". Rules are versioned, and your own replies and Recruiter decisions still go through explicit confirmation.\n\nYour knowledge, in your private GitHub (optional, off by default). Create a private repository and a fine-grained token limited to that one repository (Contents read/write), paste it in Settings and each agent's distilled rules, observations and \"What I learned\" notes are committed there: a folder per agent, one commit per sync, with a message that summarises what was learned. The app never asks for access to your other repositories. Visibility is checked before every push and nothing is pushed if the repository is public. Secrets are blocked and personal data is redacted; CVs, task content and client messages are never stored. Settings shows last sync and commit link per agent, and you can import an agent's rules back from the repository.\n\nTeams can inherit experienced agents. Export an agent with its experience as one portable package: approved rules with their versions and dates, level, XP and who wrote what. Preview the exact contents, hand it to a colleague, and they import a copy badged \"Experienced · inherited from @author\" that carries the rules' lineage. The package never contains CVs, candidate names, personal reasons or individual decisions. Imported agents start with triggers off, never overwrite an existing agent and are replay-checked against the new owner's own decisions.\n\nEight ready-to-run agents ship built in: Researcher, Sentinel (code and app review), Design Critic, Bug Triage, Launch Writer, SEO Scout, Brief Builder and Recruiter. The Recruiter shows the learning loop end to end: five intake questions become rulebook v1, then screening, your decision, a replay-checked lesson and a fairness check that refuses rules based on protected traits.\n\nReal tools, owner in control. Each run uses only the tools its agent.json declares, behind a per-run restricted tool server that never receives your tokens. Before any paid provider run you see the exact model, tool list, step, time and cost limits (the learning reflection shares that cap) and confirm that one run. A live timeline shows every tool call, and Stop ends the run.\n\nGuild Hall is a pixel-art guild room built only from real run records: lit rooms with animated props, characters that walk to their station while a stored run is working, and a blinking ! for a request waiting for your confirmation. Click a character or its room to send it on a quest right there, with the same cost and permission confirmation, a live status line and Stop.\n\nHonest by design. Level, accuracy, speed and XP come from real local runs and your feedback. There are no invented ratings or install counts. Level, XP and author handles in an imported package are claims of the exporter, not verified. Triggers (daily schedule, @mention, inboxes) are off until you switch them on and only create unpaid requests. Nothing runs at install time.\n\nLimits: Sentinel runs static syntax checks on a copy and does not execute arbitrary tests. Automatic screenshots are for public HTTPS pages. Without rated history an agent records ideas as observations instead of rules. The cost estimate compares against public API prices and is not a billing promise. GitHub sync is optional and uses only the single-repository token you create.",
+    "screenshots": [
+      {
+        "src": "static/store/guild-quest-desktop.png",
+        "alt": "Guild Hall on desktop: a pixel-art guild room with lit rooms and resting characters, and beside it the 'Send on quest' panel for the Researcher with model picker, topic field and a 'Review cost & send' button.",
+        "label": "Send agents on quests from the Guild Hall"
+      },
+      {
+        "src": "static/store/guild-desktop.png",
+        "alt": "Guild Hall on desktop: a stone hall with windows, banners and torches, a hearth and rug, and eight rooms such as Library, Guardhouse, Studio and Triage bay with animated props.",
+        "label": "A guild room built from real runs"
+      },
+      {
+        "src": "static/store/settings-desktop.png",
+        "alt": "Settings on desktop: private GitHub sync is off by default, with step-by-step instructions to create a fine-grained token limited to one repository and a field to paste it.",
+        "label": "Optional private GitHub knowledge sync"
+      },
+      {
+        "src": "static/store/inherited-desktop.png",
+        "alt": "Recruiter (copy) character sheet on desktop with the badge 'Experienced · inherited from @studio-test' and a rulebook of four inherited rules, each labelled with its author and version.",
+        "label": "Inherited experience"
+      },
+      {
+        "src": "static/store/guild-phone.png",
+        "alt": "Guild Hall on a phone: two columns of rooms with a red hallway between them where the eight pixel-art characters wait; no sideways scrolling.",
+        "label": "Guild Hall on a phone"
+      }
+    ]
+  },
+  "author": "arminzimic9-gif",
+  "license": "MIT"
+}
