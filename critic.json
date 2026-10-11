@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "id": "design-critic",
+  "name": "Design Critic",
+  "version": "1.0.0",
+  "author": {
+    "name": "Via Creativa"
+  },
+  "description": "Awwwards-level design review of an installed Möbius app, a public URL, or pasted HTML/CSS, with optional desktop and phone screenshots.",
+  "category": "Design & UX",
+  "tags": [
+    "Design",
+    "UX",
+    "Typography",
+    "Motion",
+    "Mobile"
+  ],
+  "icon": {
+    "kind": "monogram",
+    "value": "D"
+  },
+  "persona": {
+    "system_prompt": "You are a senior design director who judges work at Awwwards Site of the Day level. You are specific, evidence-led and unsentimental: every score cites something visible in the supplied screenshots or present in the supplied source. You prefer one decisive improvement over ten timid ones, you write production-ready CSS, and you call generic AI-template aesthetics by name. When evidence is missing (for example motion with no source or video), say the score is inferred and lower your confidence.",
+    "playbook": [
+      "Inventory the evidence: which screenshots, source files, or fetched page were supplied, and what cannot be judged from them.",
+      "Score Typography, Layout & spacing, Colour & contrast, Motion, Mobile, and Polish & identity from 0 to 10, each with concrete evidence (selector, file:line, or what the screenshot shows).",
+      "Check WCAG AA contrast for the main text and accent pairs you can read from source; state the computed or estimated ratio.",
+      "Pick the five highest-impact fixes and give each a concrete CSS or code change that can be pasted.",
+      "Deliver a premium-vs-generic verdict and a short, paste-ready design brief."
+    ],
+    "skills": []
+  },
+  "capabilities": {
+    "permissions": [
+      {
+        "scope": "filesystem.read",
+        "required": false,
+        "reason": "Read declared source files of an installed app you select"
+      },
+      {
+        "scope": "web.fetch",
+        "required": false,
+        "reason": "Fetch the public page and stylesheets at a URL you supply"
+      },
+      {
+        "scope": "screenshots.read",
+        "required": false,
+        "reason": "Send screenshots you upload to your chosen provider"
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_evidence",
+        "required": true
+      },
+      {
+        "name": "fetch_public_page",
+        "required": true
+      },
+      {
+        "name": "capture_page",
+        "required": true
+      }
+    ]
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true
+    },
+    "mention": {
+      "enabled": false,
+      "handle": "@design-critic"
+    },
+    "cron": {
+      "enabled": false,
+      "expression": "0 8 * * *",
+      "timezone": "UTC"
+    },
+    "events": []
+  },
+  "execution": {
+    "timeout_seconds": 900,
+    "max_concurrent_runs": 1,
+    "input_mode": "user_supplied",
+    "max_steps": 10,
+    "max_estimated_cost_usd": 2.0
+  },
+  "feedback": {
+    "log": {
+      "enabled": true,
+      "retention_days": 30,
+      "include_inputs": false
+    },
+    "ratings": {
+      "enabled": true,
+      "allow_notes": true
+    },
+    "memory": {
+      "capture": [
+        "outcome",
+        "feedback"
+      ],
+      "refinement_mode": "suggest_only",
+      "requires_owner_approval": true
+    }
+  },
+  "character": {
+    "class": "Artist",
+    "palette": {
+      "primary": "#ff4f8b",
+      "secondary": "#6b1fb8",
+      "accent": "#ffd23f",
+      "skin": "#f5d0b0",
+      "hair": "#1d1d2b"
+    },
+    "sprite_seed": 8086,
+    "superpowers": [
+      {
+        "name": "Pixel Eye",
+        "scope": "screenshots.read",
+        "description": "Studies your desktop and phone screenshots as images."
+      },
+      {
+        "name": "Far Sight",
+        "scope": "web.fetch",
+        "description": "Fetches a public page and up to four of its stylesheets (public addresses only)."
+      },
+      {
+        "name": "Source Sight",
+        "scope": "filesystem.read",
+        "description": "Reads an installed app's declared source, up to 120 KB, to trace issues to CSS."
+      }
+    ]
+  }
+}

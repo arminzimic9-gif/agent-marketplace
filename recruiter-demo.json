@@ -1,0 +1,38 @@
+[
+  {
+    "id": "demo-1", "label": "Fictional group 1 · portfolio and fundamentals", "candidates": [
+      {"name": "Mira K.", "cv": "FICTIONAL CV. Web designer; 4 years on small studio web projects. Figma components, accessibility, HTML/CSS. Portfolio: three published sites, measured navigation improvements."},
+      {"name": "Noa P.", "cv": "FICTIONAL CV. Graphic design and a strong visual portfolio; one marketing landing page. Advanced Figma. No evidence of responsive web work or developer handoff."},
+      {"name": "Ena S.", "cv": "FICTIONAL CV. Two years of product design. Designed responsive web flows, ran accessibility checks and documented handoff; little experience with brand systems."},
+      {"name": "Amar T.", "cv": "FICTIONAL CV. Frontend engineer with six shipped web applications. Understands CSS and performance well; the portfolio shows no independent visual concepts."},
+      {"name": "Luka V.", "cv": "FICTIONAL CV. Freelance web design, five published sites for small businesses. Figma, basic Webflow; strong typographic work, unclear contribution to user research."},
+      {"name": "Sara N.", "cv": "FICTIONAL CV. UX research, interviews and wireframes for SaaS. Excellent reports and usability tests; no final web visuals in the portfolio."},
+      {"name": "Dino R.", "cv": "FICTIONAL CV. Web design for two local agencies, projects from brief to handoff. Accessibility and responsiveness are described, but there are no published links or measurable outcomes."},
+      {"name": "Iva M.", "cv": "FICTIONAL CV. Self-taught; portfolio of three prototypes with no implementation. A strong sense of colour; looking for a mentoring environment and open to feedback."}
+    ]
+  },
+  {
+    "id": "demo-2", "label": "Fictional group 2 · collaboration and trade-offs", "candidates": [
+      {"name": "Adin B.", "cv": "FICTIONAL CV. Four years of web and brand design. The portfolio shows concept, mobile and developer handoff; ran client workshops. No claims about measurable outcomes."},
+      {"name": "Tea F.", "cv": "FICTIONAL CV. Accessible web products in a larger team. WCAG audits, Figma libraries, structured handoff; little work against independent studio deadlines."},
+      {"name": "Leon H.", "cv": "FICTIONAL CV. Highly creative portfolio with animations and 3D scenes; most examples have no mobile version. Client feedback and maintenance are not shown."},
+      {"name": "Una J.", "cv": "FICTIONAL CV. Two years in a small studio, five responsive sites, hands-on user testing and clear notes for developers. The visual style is plain."},
+      {"name": "Tarik C.", "cv": "FICTIONAL CV. Senior UI design for an internal enterprise platform; complex flows and component systems. No public marketing web projects, but detailed case studies exist."},
+      {"name": "Nika D.", "cv": "FICTIONAL CV. CMS editing and marketing campaigns. Basic Figma, content and SEO experience; has not led web interface design from brief to delivery."},
+      {"name": "Petar G.", "cv": "FICTIONAL CV. Three years of web design and no-code development for small businesses. Documented processes and accepted client iterations; accessibility and QA are not mentioned."},
+      {"name": "Lana O.", "cv": "FICTIONAL CV. Product design and illustration. Two published responsive sites, preserved the brand, worked with a frontend team. One case study shows a good response to critique."}
+    ]
+  },
+  {
+    "id": "demo-3", "label": "Fictional group 3 · checking what was learned", "candidates": [
+      {"name": "Ema Z.", "cv": "FICTIONAL CV. Independently led four small web projects; responsive prototypes, design system, handoff and QA. Shows concrete changes made after feedback."},
+      {"name": "Omar L.", "cv": "FICTIONAL CV. Striking brand work and presentations, but no published websites or mobile prototypes. Wants to move into web design."},
+      {"name": "Vera A.", "cv": "FICTIONAL CV. Webflow implementation and quality CSS; in teams mostly executed other people's designs. Shows one independent concept that was tested with users."},
+      {"name": "Filip Q.", "cv": "FICTIONAL CV. Five years of UX work on web applications, accessibility and analytics. The portfolio is systematically strong but limited in art direction for small brands."},
+      {"name": "Ajla W.", "cv": "FICTIONAL CV. Delivered campaign websites for a small studio from brief to QA. Strong mobile views and collaboration; no public conversion figure is given."},
+      {"name": "Roko Y.", "cv": "FICTIONAL CV. Experimental interactive web and animation, two public projects. Skilled at prototyping, but does not describe accessibility or client communication."},
+      {"name": "Kaja E.", "cv": "FICTIONAL CV. Design systems and content design. Clear process case studies, good documentation and critical evaluation; one published responsive site."},
+      {"name": "Boris U.", "cv": "FICTIONAL CV. Six small websites with references and design experience in Figma. The process description covers only final screens; no data on accessibility, QA or iterations."}
+    ]
+  }
+]

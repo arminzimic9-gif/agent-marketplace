@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0.0",
+  "id": "researcher",
+  "name": "Autonomous Deep Researcher",
+  "version": "1.0.0",
+  "author": {
+    "name": "Möbius"
+  },
+  "description": "Research a topic using retrieved scholarly evidence and produce a cited Markdown report.",
+  "category": "Research",
+  "tags": [
+    "Research",
+    "Sources",
+    "Reports"
+  ],
+  "icon": {
+    "kind": "monogram",
+    "value": "R"
+  },
+  "persona": {
+    "system_prompt": "You are a careful researcher. Distinguish facts supported by supplied source excerpts from gaps and hypotheses. Cite only supplied sources with their exact URLs. Never claim you read a full paper when only an abstract was supplied.",
+    "playbook": [
+      "Break the topic into focused sub-questions.",
+      "Assess the retrieved source abstracts and metadata; identify what remains unverified.",
+      "Explain supported insights, pros, cons and uncertainty with citations.",
+      "Produce a Markdown report that the owner can review before putting any claim in Möbius Memory."
+    ],
+    "skills": []
+  },
+  "capabilities": {
+    "permissions": [
+      {
+        "scope": "web.fetch",
+        "required": true,
+        "reason": "Retrieve public scholarly source metadata and abstracts"
+      },
+      {
+        "scope": "memory.suggest",
+        "required": false,
+        "reason": "Prepare a Markdown report for owner review, not write Memory automatically"
+      }
+    ],
+    "tools": [
+      {
+        "name": "search_research",
+        "required": true
+      },
+      {
+        "name": "fetch_public_page",
+        "required": true
+      }
+    ]
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true
+    },
+    "mention": {
+      "enabled": false,
+      "handle": "@researcher"
+    },
+    "cron": {
+      "enabled": false,
+      "expression": "0 8 * * *",
+      "timezone": "UTC"
+    },
+    "events": []
+  },
+  "execution": {
+    "timeout_seconds": 600,
+    "max_concurrent_runs": 1,
+    "input_mode": "user_supplied",
+    "max_steps": 12,
+    "max_estimated_cost_usd": 2.0
+  },
+  "feedback": {
+    "log": {
+      "enabled": true,
+      "retention_days": 30,
+      "include_inputs": false
+    },
+    "ratings": {
+      "enabled": true,
+      "allow_notes": true
+    },
+    "memory": {
+      "capture": [
+        "outcome",
+        "feedback"
+      ],
+      "refinement_mode": "suggest_only",
+      "requires_owner_approval": true
+    }
+  },
+  "character": {
+    "class": "Scholar",
+    "palette": {
+      "primary": "#2fb8a8",
+      "secondary": "#145a5e",
+      "accent": "#f5e6a8",
+      "skin": "#e0a878",
+      "hair": "#d9d2c5"
+    },
+    "sprite_seed": 4211,
+    "superpowers": [
+      {
+        "name": "Citation Seeker",
+        "scope": "web.fetch",
+        "description": "Retrieves up to six distinct scholarly abstracts from OpenAlex and cites each by URL."
+      },
+      {
+        "name": "Memory Scribe",
+        "scope": "memory.suggest",
+        "description": "Drafts a Memory-ready summary for you to review; never writes Memory itself."
+      }
+    ]
+  }
+}

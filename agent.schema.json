@@ -1,0 +1,306 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Möbius Agent Manifest",
+  "description": "Declarative agent identity, requested capabilities, triggers, execution limits, and feedback. A manifest requests authority but never grants it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "name", "version", "author", "description", "category", "tags", "icon", "persona", "capabilities", "triggers", "execution", "feedback"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,47}$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?$" },
+    "author": {
+      "type": "object", "additionalProperties": false, "required": ["name"],
+      "properties": { "name": { "type": "string", "minLength": 1 }, "website": { "type": "string", "format": "uri" } }
+    },
+    "description": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "category": { "type": "string", "minLength": 1 },
+    "tags": { "type": "array", "maxItems": 8, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "icon": {
+      "type": "object", "additionalProperties": false, "required": ["kind", "value"],
+      "properties": { "kind": { "enum": ["monogram", "url"] }, "value": { "type": "string", "minLength": 1 } }
+    },
+    "persona": {
+      "type": "object", "additionalProperties": false, "required": ["system_prompt", "playbook", "skills"],
+      "properties": {
+        "system_prompt": { "type": "string", "minLength": 1 },
+        "playbook": { "type": "array", "items": { "type": "string" } },
+        "skills": { "type": "array", "uniqueItems": true, "items": { "type": "string" } }
+      }
+    },
+    "capabilities": {
+      "type": "object", "additionalProperties": false, "required": ["permissions", "tools"],
+      "properties": {
+        "permissions": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false, "required": ["scope", "required", "reason"],
+            "properties": {
+              "scope": { "type": "string", "minLength": 1 },
+              "required": { "type": "boolean" },
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "tools": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "required"],
+            "properties": { "name": { "type": "string", "enum": ["record_plan", "read_evidence", "search_research", "fetch_public_page", "capture_page", "write_patch", "run_checks", "check_rules", "self_check", "code.review", "filesystem.read", "web.fetch", "memory.suggest"], "description": "Named Marketplace tool; runtime intersects this request with the workflow's safe allowlist. Legacy names are accepted only for older manifests. Never an arbitrary shell command." }, "required": { "type": "boolean" } }
+          }
+        }
+      }
+    },
+    "triggers": {
+      "type": "object", "additionalProperties": false, "required": ["manual", "mention", "cron", "events"],
+      "properties": {
+        "manual": { "$ref": "#/$defs/enablement" },
+        "mention": {
+          "type": "object", "additionalProperties": false, "required": ["enabled", "handle"],
+          "properties": { "enabled": { "type": "boolean" }, "handle": { "type": "string", "pattern": "^@[a-z][a-z0-9-]{0,47}$" } }
+        },
+        "cron": {
+          "type": "object", "additionalProperties": false, "required": ["enabled", "expression", "timezone"],
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "expression": { "type": "string", "minLength": 9 },
+            "timezone": { "type": "string", "minLength": 1 }
+          }
+        },
+        "events": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "enabled"],
+            "properties": { "name": { "type": "string", "minLength": 1 }, "enabled": { "type": "boolean" } }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false, "required": ["timeout_seconds", "max_concurrent_runs", "input_mode"],
+      "properties": {
+        "timeout_seconds": { "type": "integer", "minimum": 1, "maximum": 3600 },
+        "max_steps": { "type": "integer", "minimum": 3, "maximum": 24 },
+        "max_estimated_cost_usd": { "type": "number", "minimum": 0.05, "maximum": 10 },
+        "max_concurrent_runs": { "type": "integer", "minimum": 1, "maximum": 10 },
+        "input_mode": { "enum": ["user_supplied", "trigger_payload"] }
+      }
+    },
+    "feedback": {
+      "type": "object", "additionalProperties": false, "required": ["log", "ratings", "memory"],
+      "properties": {
+        "log": {
+          "type": "object", "additionalProperties": false, "required": ["enabled", "retention_days", "include_inputs"],
+          "properties": {
+            "enabled": { "type": "boolean" }, "retention_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+            "include_inputs": { "type": "boolean" }
+          }
+        },
+        "ratings": {
+          "type": "object", "additionalProperties": false, "required": ["enabled", "allow_notes"],
+          "properties": { "enabled": { "type": "boolean" }, "allow_notes": { "type": "boolean" } }
+        },
+        "memory": {
+          "type": "object", "additionalProperties": false, "required": ["capture", "refinement_mode", "requires_owner_approval"],
+          "properties": {
+            "capture": { "type": "array", "uniqueItems": true, "items": { "type": "string" } },
+            "refinement_mode": { "enum": ["off", "suggest_only"] },
+            "requires_owner_approval": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "learning": {
+      "description": "Optional owner-controlled learning policy. The live rules, decisions, replay results and versions are app-owned records, not authority granted by this manifest; their record shapes are documented in $defs below.",
+      "type": "object", "additionalProperties": false,
+      "required": ["rulebook", "decisions", "replay", "requires_owner_approval"],
+      "properties": {
+        "rulebook": {
+          "type": "object", "additionalProperties": false,
+          "required": ["versioned", "owner_editable"],
+          "properties": { "versioned": { "const": true }, "owner_editable": { "type": "boolean" } }
+        },
+        "decisions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["source", "reason_on_disagreement"],
+          "properties": {
+            "source": { "const": "owner" },
+            "reason_on_disagreement": { "type": "boolean" }
+          }
+        },
+        "replay": {
+          "type": "object", "additionalProperties": false,
+          "required": ["scope", "provider_calls", "show_regressions"],
+          "properties": {
+            "scope": { "const": "all_prior_owner_decisions" },
+            "provider_calls": { "const": 1 },
+            "show_regressions": { "const": true }
+          }
+        },
+        "requires_owner_approval": { "const": true }
+      }
+    },
+    "experience": {
+      "description": "Optional runtime specialty retained when an experienced agent is installed as a copy. The portable rulebook and provenance live in the experience package, not in agent.json.",
+      "type": "object", "additionalProperties": false, "required": ["workflow_id"],
+      "properties": { "workflow_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,47}$" } }
+    },
+    "character": {
+      "description": "Optional game-layer presentation. It never grants authority: each superpower names a permission scope declared in capabilities, or null for an output the agent produces.",
+      "type": "object", "additionalProperties": false, "required": ["class", "palette", "sprite_seed"],
+      "properties": {
+        "class": { "type": "string", "minLength": 1, "maxLength": 24 },
+        "palette": {
+          "type": "object", "additionalProperties": false, "required": ["primary", "secondary", "accent", "skin"],
+          "properties": {
+            "primary": { "$ref": "#/$defs/hex" }, "secondary": { "$ref": "#/$defs/hex" },
+            "accent": { "$ref": "#/$defs/hex" }, "skin": { "$ref": "#/$defs/hex" }, "hair": { "$ref": "#/$defs/hex" }
+          }
+        },
+        "sprite_seed": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "superpowers": {
+          "type": "array", "maxItems": 6,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "scope", "description"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1, "maxLength": 40 },
+              "scope": { "type": ["string", "null"] },
+              "description": { "type": "string", "minLength": 1, "maxLength": 160 }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "experiencePackage": {
+      "description": "One portable agent.json plus playbook and allowlisted experience. Validate agent separately against this schema's manifest root; no decisions, CVs, names, notes or run records are transport fields.",
+      "type": "object", "additionalProperties": false,
+      "required": ["package_version", "agent", "playbook", "experience"],
+      "properties": {
+        "package_version": { "const": "1.0.0" },
+        "agent": { "type": "object" },
+        "playbook": { "type": "string", "minLength": 1, "maxLength": 24000 },
+        "experience": { "$ref": "#/$defs/portableExperience" }
+      }
+    },
+    "portableExperience": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_id", "role", "versions", "xp", "level", "curve", "provenance"],
+      "properties": {
+        "workflow_id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,47}$" },
+        "role": { "type": "string", "maxLength": 800 },
+        "versions": { "type": "array", "maxItems": 200, "items": { "$ref": "#/$defs/portableVersion" } },
+        "xp": { "type": "integer", "minimum": 0, "maximum": 1000000000 },
+        "level": { "type": "integer", "minimum": 1, "maximum": 3163 },
+        "curve": { "type": "array", "maxItems": 500, "items": { "$ref": "#/$defs/aggregateAgreement" } },
+        "provenance": { "$ref": "#/$defs/experienceProvenance" }
+      }
+    },
+    "portableVersion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "created_at", "rules", "agreement"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "rules": { "type": "array", "maxItems": 40, "items": { "$ref": "#/$defs/portableRule" } },
+        "agreement": { "$ref": "#/$defs/aggregateAgreement" }
+      }
+    },
+    "portableRule": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "text", "source", "origin"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^r[0-9a-f]{8}$" },
+        "text": { "type": "string", "minLength": 3, "maxLength": 600 },
+        "source": { "enum": ["intake:requirements", "intake:preferences", "intake:deal_breakers", "intake:team_style", "owner-decision", "owner-reply", "agent-reflection", "manual"] },
+        "origin": { "$ref": "#/$defs/ruleOrigin" }
+      }
+    },
+    "ruleOrigin": {
+      "type": "object", "additionalProperties": false,
+      "required": ["author_handle", "version", "created_at"],
+      "properties": {
+        "author_handle": { "type": "string", "pattern": "^@[A-Za-z0-9][A-Za-z0-9_.-]{1,39}$" },
+        "version": { "type": "integer", "minimum": 1 },
+        "created_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "aggregateAgreement": {
+      "type": "object", "additionalProperties": false,
+      "required": ["correct", "total"],
+      "properties": {
+        "correct": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "experienceProvenance": {
+      "description": "A chain of author-declared transfers. Counts are aggregate only and the handle is not cryptographically verified.",
+      "type": "object", "additionalProperties": false, "required": ["chain"],
+      "properties": { "chain": { "type": "array", "minItems": 1, "maxItems": 64, "items": { "$ref": "#/$defs/provenanceStep" } } }
+    },
+    "provenanceStep": {
+      "type": "object", "additionalProperties": false,
+      "required": ["author_handle", "exported_at", "decision_count", "final_agreement"],
+      "properties": {
+        "author_handle": { "type": "string", "pattern": "^@[A-Za-z0-9][A-Za-z0-9_.-]{1,39}$" },
+        "exported_at": { "type": "string", "format": "date-time" },
+        "decision_count": { "type": "integer", "minimum": 0 },
+        "final_agreement": { "$ref": "#/$defs/aggregateAgreement" }
+      }
+    },
+    "learningRule": {
+      "description": "One approved, job-relevant rule or agent lesson in an app-owned version.",
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "text", "sources"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^r[0-9a-f]{8}$" },
+        "text": { "type": "string", "minLength": 3, "maxLength": 600 },
+        "sources": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "learningDecision": {
+      "description": "An owner choice against an advisory recruiter verdict, or a helpfulness rating for another agent. Hiring disagreements carry a reason and candidate/round IDs.",
+      "type": "object", "additionalProperties": true,
+      "required": ["id", "choice", "agent_verdict"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+        "choice": { "enum": ["Invite", "Reject", "up"] },
+        "agent_verdict": { "enum": ["Invite", "Reject", "up", "down"] },
+        "reason": { "type": "string", "maxLength": 500 },
+        "candidate_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+        "round_id": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+        "source_rating": { "enum": ["up", "down"] }
+      }
+    },
+    "learningReplay": {
+      "description": "One provider-call counterfactual replay over every prior owner decision or rating; before/after counts and fixed/broken IDs are shown before acceptance.",
+      "type": "object", "additionalProperties": false,
+      "required": ["total", "before", "after", "fixed", "broken", "warnings", "predictions"],
+      "properties": {
+        "total": { "type": "integer", "minimum": 0 },
+        "before": { "type": "integer", "minimum": 0 },
+        "after": { "type": "integer", "minimum": 0 },
+        "fixed": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[0-9a-f]{32}$" } },
+        "broken": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[0-9a-f]{32}$" } },
+        "warnings": { "type": "array", "items": { "type": "string" } },
+        "predictions": { "type": "object", "propertyNames": { "pattern": "^[0-9a-f]{32}$" }, "additionalProperties": { "enum": ["Invite", "Reject", "up", "down"] } }
+      }
+    },
+    "learningVersion": {
+      "description": "An immutable accepted rulebook version; v1 intake may have no replay, later versions include the accepted replay.",
+      "type": "object", "additionalProperties": true,
+      "required": ["version", "created_at", "reason", "rules"],
+      "properties": {
+        "version": { "type": "integer", "minimum": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "reason": { "type": "string" },
+        "rules": { "type": "array", "items": { "$ref": "#/$defs/learningRule" } },
+        "replay": { "$ref": "#/$defs/learningReplay" }
+      }
+    },
+    "hex": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "enablement": {
+      "type": "object", "additionalProperties": false, "required": ["enabled"],
+      "properties": { "enabled": { "type": "boolean" } }
+    }
+  }
+}

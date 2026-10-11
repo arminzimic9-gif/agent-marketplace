@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "id": "bug-triage",
+  "name": "Bug Triage",
+  "version": "1.0.0",
+  "author": {
+    "name": "Möbius"
+  },
+  "description": "Turns messy bug reports or a pasted Social thread into deduplicated, GitHub-issue-ready tickets with repro steps, severity and a fix plan.",
+  "category": "Code & QA",
+  "tags": [
+    "QA",
+    "Triage",
+    "GitHub"
+  ],
+  "icon": {
+    "kind": "monogram",
+    "value": "B"
+  },
+  "persona": {
+    "system_prompt": "You are a calm, exacting QA lead. You merge duplicates, separate symptoms from causes, write reproduction steps a stranger can follow, and assign severity with a stated reason. You never invent environment details, logs or files you were not given; unknowns become explicit questions.",
+    "playbook": [
+      "Read every pasted report or message; list each distinct problem once and note which reports duplicate it.",
+      "For each problem write numbered reproduction steps, expected vs actual behaviour, and what is still unknown.",
+      "Assign severity (S1 critical to S4 cosmetic) with a one-line reason, and name the likely component — citing file:line only when app source was supplied.",
+      "Propose a fix plan and how to verify it.",
+      "Export each problem as a GitHub-issue-ready Markdown block."
+    ],
+    "skills": []
+  },
+  "capabilities": {
+    "permissions": [
+      {
+        "scope": "input.read",
+        "required": true,
+        "reason": "Read the bug reports or Social thread text you paste"
+      },
+      {
+        "scope": "filesystem.read",
+        "required": false,
+        "reason": "Optionally read an installed app's declared source to locate the likely component"
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_evidence",
+        "required": true
+      }
+    ]
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true
+    },
+    "mention": {
+      "enabled": false,
+      "handle": "@bug-triage"
+    },
+    "cron": {
+      "enabled": false,
+      "expression": "0 8 * * *",
+      "timezone": "UTC"
+    },
+    "events": []
+  },
+  "execution": {
+    "timeout_seconds": 600,
+    "max_concurrent_runs": 1,
+    "input_mode": "user_supplied",
+    "max_steps": 8,
+    "max_estimated_cost_usd": 2.0
+  },
+  "feedback": {
+    "log": {
+      "enabled": true,
+      "retention_days": 30,
+      "include_inputs": false
+    },
+    "ratings": {
+      "enabled": true,
+      "allow_notes": true
+    },
+    "memory": {
+      "capture": [
+        "outcome",
+        "feedback"
+      ],
+      "refinement_mode": "suggest_only",
+      "requires_owner_approval": true
+    }
+  },
+  "character": {
+    "class": "Mechanic",
+    "palette": {
+      "primary": "#ff8a1f",
+      "secondary": "#7a3b0c",
+      "accent": "#9fe870",
+      "skin": "#c98b5e",
+      "hair": "#2a1a10"
+    },
+    "sprite_seed": 5150,
+    "superpowers": [
+      {
+        "name": "Triage Sense",
+        "scope": "input.read",
+        "description": "Reads up to 20,000 characters of pasted reports or a copied Social thread and merges duplicates."
+      },
+      {
+        "name": "Component Compass",
+        "scope": "filesystem.read",
+        "description": "Maps each problem to likely files in an installed app's source (up to 120 KB)."
+      },
+      {
+        "name": "Issue Forge",
+        "scope": null,
+        "description": "Exports every problem as GitHub-issue-ready Markdown you can copy."
+      }
+    ]
+  }
+}

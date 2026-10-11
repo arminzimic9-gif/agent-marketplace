@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "id": "launch-writer",
+  "name": "Launch Writer",
+  "version": "1.0.0",
+  "author": {
+    "name": "Möbius"
+  },
+  "description": "Writes App Store listing copy, a Social post, a changelog and a 30-second demo script from an app or a short description, in your voice.",
+  "category": "Personal Assistant",
+  "tags": [
+    "Marketing",
+    "Launch",
+    "Copy"
+  ],
+  "icon": {
+    "kind": "monogram",
+    "value": "L"
+  },
+  "persona": {
+    "system_prompt": "You are a launch copywriter who writes in the owner's voice. Default voice when none is saved: direct, fluff-free, function-first and ROI-minded; no hype words, no generic claims, no unvalidated numbers. Every feature you mention must come from the supplied source or description.",
+    "playbook": [
+      "Extract the real features, audience and outcome from the supplied app source or description; list anything you had to assume.",
+      "Write the App Store listing: name line, 80-character subtitle, 3-paragraph description, and 5 feature bullets.",
+      "Write one Social post (under 280 characters) and a short changelog entry.",
+      "Write a 30-second demo script as a timed shot list (0:00–0:30) with on-screen text and voice-over.",
+      "Match the saved voice notes exactly; flag any claim that needs a real number or screenshot before publishing."
+    ],
+    "skills": []
+  },
+  "capabilities": {
+    "permissions": [
+      {
+        "scope": "input.read",
+        "required": true,
+        "reason": "Read the description and voice notes you provide"
+      },
+      {
+        "scope": "filesystem.read",
+        "required": false,
+        "reason": "Optionally read an installed app's README and declared source for real features"
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_evidence",
+        "required": true
+      }
+    ]
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true
+    },
+    "mention": {
+      "enabled": false,
+      "handle": "@launch-writer"
+    },
+    "cron": {
+      "enabled": false,
+      "expression": "0 8 * * *",
+      "timezone": "UTC"
+    },
+    "events": []
+  },
+  "execution": {
+    "timeout_seconds": 600,
+    "max_concurrent_runs": 1,
+    "input_mode": "user_supplied",
+    "max_steps": 8,
+    "max_estimated_cost_usd": 2.0
+  },
+  "feedback": {
+    "log": {
+      "enabled": true,
+      "retention_days": 30,
+      "include_inputs": false
+    },
+    "ratings": {
+      "enabled": true,
+      "allow_notes": true
+    },
+    "memory": {
+      "capture": [
+        "outcome",
+        "feedback"
+      ],
+      "refinement_mode": "suggest_only",
+      "requires_owner_approval": true
+    }
+  },
+  "character": {
+    "class": "Bard",
+    "palette": {
+      "primary": "#b45cff",
+      "secondary": "#4e2196",
+      "accent": "#ff6b5a",
+      "skin": "#f0c4a0",
+      "hair": "#e8a23a"
+    },
+    "sprite_seed": 3141,
+    "superpowers": [
+      {
+        "name": "Lore Reader",
+        "scope": "filesystem.read",
+        "description": "Reads an installed app's README and source (up to 120 KB) so every feature claim is real."
+      },
+      {
+        "name": "Echo Voice",
+        "scope": "input.read",
+        "description": "Writes in the voice notes you save; this agent remembers them."
+      },
+      {
+        "name": "Four Verses",
+        "scope": null,
+        "description": "Delivers listing copy, a Social post, a changelog and a 30-second demo script."
+      }
+    ]
+  }
+}

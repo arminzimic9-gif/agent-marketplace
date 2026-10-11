@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "id": "seo-scout",
+  "name": "SEO Scout",
+  "version": "1.0.0",
+  "author": {
+    "name": "Möbius"
+  },
+  "description": "Audits a public URL or pasted HTML for meta tags, headings, schema markup, crawlability and Core Web Vitals risks, with fixes ranked by impact.",
+  "category": "DevOps",
+  "tags": [
+    "SEO",
+    "Audit",
+    "Web"
+  ],
+  "icon": {
+    "kind": "monogram",
+    "value": "S"
+  },
+  "persona": {
+    "system_prompt": "You are a technical SEO specialist. You ground every finding in the extracted page facts or HTML you were given, you separate measured facts from heuristics, and you never claim Core Web Vitals measurements you do not have — only risks visible in the markup.",
+    "playbook": [
+      "Review the extracted facts first: title, meta description, canonical, robots, language, viewport, Open Graph, headings, JSON-LD types, image alt coverage, scripts and robots.txt/sitemap presence.",
+      "Check each against current best practice and note what is missing, duplicated, too long or too short.",
+      "Assess Core Web Vitals risks from markup only (render-blocking resources, images without dimensions, lazy-loading, font loading) and label them as hints.",
+      "Output Markdown starting with `Score: <0-100>/100`, then a findings table, then fixes ranked by impact with exact HTML to paste.",
+      "End with what could not be checked without a browser or analytics."
+    ],
+    "skills": []
+  },
+  "capabilities": {
+    "permissions": [
+      {
+        "scope": "web.fetch",
+        "required": false,
+        "reason": "Fetch a public page, its robots.txt and sitemap.xml (public addresses only)"
+      },
+      {
+        "scope": "input.read",
+        "required": false,
+        "reason": "Read HTML you paste"
+      }
+    ],
+    "tools": [
+      {
+        "name": "read_evidence",
+        "required": true
+      },
+      {
+        "name": "fetch_public_page",
+        "required": true
+      }
+    ]
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true
+    },
+    "mention": {
+      "enabled": false,
+      "handle": "@seo-scout"
+    },
+    "cron": {
+      "enabled": false,
+      "expression": "0 8 * * *",
+      "timezone": "UTC"
+    },
+    "events": []
+  },
+  "execution": {
+    "timeout_seconds": 600,
+    "max_concurrent_runs": 1,
+    "input_mode": "user_supplied",
+    "max_steps": 10,
+    "max_estimated_cost_usd": 2.0
+  },
+  "feedback": {
+    "log": {
+      "enabled": true,
+      "retention_days": 30,
+      "include_inputs": false
+    },
+    "ratings": {
+      "enabled": true,
+      "allow_notes": true
+    },
+    "memory": {
+      "capture": [
+        "outcome",
+        "feedback"
+      ],
+      "refinement_mode": "suggest_only",
+      "requires_owner_approval": true
+    }
+  },
+  "character": {
+    "class": "Ranger",
+    "palette": {
+      "primary": "#4ccf5a",
+      "secondary": "#1f5e28",
+      "accent": "#c8a165",
+      "skin": "#d9a37a",
+      "hair": "#5a3a1e"
+    },
+    "sprite_seed": 2718,
+    "superpowers": [
+      {
+        "name": "Far Sight",
+        "scope": "web.fetch",
+        "description": "Fetches a public page plus its robots.txt and sitemap.xml (public addresses only)."
+      },
+      {
+        "name": "Tag Tracker",
+        "scope": "input.read",
+        "description": "Extracts title, meta, canonical, headings, JSON-LD and alt coverage before the provider sees the page."
+      },
+      {
+        "name": "Ranked Trail",
+        "scope": null,
+        "description": "Scores the page 0–100 and ranks fixes by impact, with HTML to paste."
+      }
+    ]
+  }
+}
