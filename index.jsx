@@ -11,6 +11,7 @@ import { RecruiterDesk } from './recruiter.jsx'
 import { AgentReply } from './reply.jsx'
 import { GuildHall } from './guild.jsx'
 import { GUILD_CSS } from './guild-theme.js'
+import { LaunchVideo, LAUNCH_VIDEO_CSS, LAUNCH_VIDEO_FILE, PlayGlyph } from './launchvideo.jsx'
 import { ExperienceBadge, ExperienceExport, ExperienceImport, RuleLineage } from './experience.jsx'
 import { EXPERIENCE_CSS } from './experience-theme.js'
 import { AGENT_CSS } from './agent-theme.js'
@@ -137,6 +138,7 @@ export default function App({ appId, token }) {
   const [input, setInput] = useState(INITIAL_INPUT)
   const [activeId, setActiveId] = useState('')
   const [hallOpen, setHallOpen] = useState(false)
+  const [videoOpen, setVideoOpen] = useState(false)
   const [result, setResult] = useState(null)
   const [details, setDetails] = useState({})
   const [celebrate, setCelebrate] = useState('')
@@ -668,7 +670,8 @@ export default function App({ appId, token }) {
   </>
 
   return <div className="am-root">
-    <style>{CSS + EXPERIENCE_CSS + AGENT_CSS + GUILD_CSS + LEARNED_CSS}</style>
+    <style>{CSS + EXPERIENCE_CSS + AGENT_CSS + GUILD_CSS + LEARNED_CSS + LAUNCH_VIDEO_CSS}</style>
+    {videoOpen && <LaunchVideo src={'/app-assets/by-id/' + appId + '/' + LAUNCH_VIDEO_FILE} onClose={() => setVideoOpen(false)}/>}
     <header className="am-top">
       <button className="am-brand" onClick={() => goto('home')} aria-label="Agent Hub home"><span className="am-brand-mark" aria-hidden="true"/><span>Möbius</span><span className="am-mono am-brand-sub">/ Agent Hub</span></button>
       <nav className="am-nav" aria-label="Agent Hub sections">
@@ -689,6 +692,7 @@ export default function App({ appId, token }) {
           <p className="am-hero-lede" data-reveal style={{ '--d': '160ms' }}>A party of specialised agents that read real evidence, ask before they spend, and level up only from work they actually finished.</p>
           <div className="am-hero-actions" data-reveal style={{ '--d': '240ms' }}>
             <button className="am-pill" onClick={() => partyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>Meet the party<span className="am-pill-dot" aria-hidden="true"><ArrowRight width={14}/></span></button>
+            <button className="am-ghost am-video-play" onClick={() => setVideoOpen(true)}><PlayGlyph/>Watch launch video</button>
             <button className="am-ghost" onClick={() => goto('spec')}>Read the open spec</button>
           </div>
           <dl className="am-hero-stats am-mono" data-reveal style={{ '--d': '320ms' }}>

@@ -1,7 +1,7 @@
 {
   "id": "agent-marketplace",
   "name": "Agent Marketplace",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Hire AI agents that remember what you teach them and can pass their experience on: versioned, replay-checked rulebooks, portable experience packages, real tools and owner-confirmed runs.",
   "entry": "index.jsx",
   "icon": "icon.png",
@@ -136,21 +136,22 @@
     "reflection.py",
     "learned.jsx",
     "learned-theme.js",
-    "test_reflection.py"
+    "test_reflection.py",
+    "launchvideo.jsx"
   ],
   "store": {
     "tagline": "Hire agents that remember — and pass their experience on.",
-    "description": "Agents that learn. After every completed run an agent reflects on what worked, what failed and the feedback you gave it, and updates its rulebook automatically, but only when a replay over your earlier ratings shows nothing gets worse. Every run ends with a \"What I learned\" report: new, changed or removed rules with the reason, or an explicit \"nothing new learned\". Rules are versioned, and your own replies and Recruiter decisions still go through explicit confirmation.\n\nYour knowledge, in your private GitHub (optional, off by default). Create a private repository and a fine-grained token limited to that one repository (Contents read/write), paste it in Settings and each agent's distilled rules, observations and \"What I learned\" notes are committed there: a folder per agent, one commit per sync, with a message that summarises what was learned. The app never asks for access to your other repositories. Visibility is checked before every push and nothing is pushed if the repository is public. Secrets are blocked and personal data is redacted; CVs, task content and client messages are never stored. Settings shows last sync and commit link per agent, and you can import an agent's rules back from the repository.\n\nTeams can inherit experienced agents. Export an agent with its experience as one portable package: approved rules with their versions and dates, level, XP and who wrote what. Preview the exact contents, hand it to a colleague, and they import a copy badged \"Experienced · inherited from @author\" that carries the rules' lineage. The package never contains CVs, candidate names, personal reasons or individual decisions. Imported agents start with triggers off, never overwrite an existing agent and are replay-checked against the new owner's own decisions.\n\nEight ready-to-run agents ship built in: Researcher, Sentinel (code and app review), Design Critic, Bug Triage, Launch Writer, SEO Scout, Brief Builder and Recruiter. The Recruiter shows the learning loop end to end: five intake questions become rulebook v1, then screening, your decision, a replay-checked lesson and a fairness check that refuses rules based on protected traits.\n\nReal tools, owner in control. Each run uses only the tools its agent.json declares, behind a per-run restricted tool server that never receives your tokens. Before any paid provider run you see the exact model, tool list, step, time and cost limits (the learning reflection shares that cap) and confirm that one run. A live timeline shows every tool call, and Stop ends the run.\n\nGuild Hall is a pixel-art guild room built only from real run records: lit rooms with animated props, characters that walk to their station while a stored run is working, and a blinking ! for a request waiting for your confirmation. Click a character or its room to send it on a quest right there, with the same cost and permission confirmation, a live status line and Stop.\n\nHonest by design. Level, accuracy, speed and XP come from real local runs and your feedback. There are no invented ratings or install counts. Level, XP and author handles in an imported package are claims of the exporter, not verified. Triggers (daily schedule, @mention, inboxes) are off until you switch them on and only create unpaid requests. Nothing runs at install time.\n\nLimits: Sentinel runs static syntax checks on a copy and does not execute arbitrary tests. Automatic screenshots are for public HTTPS pages. Without rated history an agent records ideas as observations instead of rules. The cost estimate compares against public API prices and is not a billing promise. GitHub sync is optional and uses only the single-repository token you create.",
+    "description": "Agents that learn. After every completed run an agent reflects on what worked, what failed and the feedback you gave it, and updates its rulebook automatically, but only when a replay over your earlier ratings shows nothing gets worse. Every run ends with a \"What I learned\" report: new, changed or removed rules with the reason, or an explicit \"nothing new learned\". Rules are versioned, and your own replies and Recruiter decisions still go through explicit confirmation.\n\nYour knowledge, in your private GitHub (optional, off by default). Create a private repository and a fine-grained token limited to that one repository (Contents read/write), paste it in Settings and each agent's distilled rules, observations and \"What I learned\" notes are committed there: a folder per agent, one commit per sync, with a message that summarises what was learned. The app never asks for access to your other repositories. Visibility is checked before every push and nothing is pushed if the repository is public. Secrets are blocked and personal data is redacted; CVs, task content and client messages are never stored. Settings shows last sync and commit link per agent, and you can import an agent's rules back from the repository.\n\nTeams can inherit experienced agents. Export an agent with its experience as one portable package: approved rules with their versions and dates, level, XP and who wrote what. Preview the exact contents, hand it to a colleague, and they import a copy badged \"Experienced · inherited from @author\" that carries the rules' lineage. The package never contains CVs, candidate names, personal reasons or individual decisions. Imported agents start with triggers off, never overwrite an existing agent and are replay-checked against the new owner's own decisions.\n\nEight ready-to-run agents ship built in: Researcher, Sentinel (code and app review), Design Critic, Bug Triage, Launch Writer, SEO Scout, Brief Builder and Recruiter. The Recruiter shows the learning loop end to end: five intake questions become rulebook v1, then screening, your decision, a replay-checked lesson and a fairness check that refuses rules based on protected traits.\n\nReal tools, owner in control. Each run uses only the tools its agent.json declares, behind a per-run restricted tool server that never receives your tokens. Before any paid provider run you see the exact model, tool list, step, time and cost limits (the learning reflection shares that cap) and confirm that one run. A live timeline shows every tool call, and Stop ends the run.\n\nGuild Hall is a pixel-art guild room built only from real run records: lit rooms with animated props, characters that walk to their station while a stored run is working, and a blinking ! for a request waiting for your confirmation. Click a character or its room to send it on a quest right there, with the same cost and permission confirmation, a live status line and Stop.\n\nLaunch video. A 55-second pixel-art launch video, with English subtitles, plays from the \"Watch launch video\" button on the Home hero, in a full-screen player with controls, Esc and Close. It is only downloaded when you press play. By Via Creativa Studio for Möbius; music by Gregor Quendel, CC BY 4.0.\n\nHonest by design. Level, accuracy, speed and XP come from real local runs and your feedback. There are no invented ratings or install counts. Level, XP and author handles in an imported package are claims of the exporter, not verified. Triggers (daily schedule, @mention, inboxes) are off until you switch them on and only create unpaid requests. Nothing runs at install time.\n\nLimits: Sentinel runs static syntax checks on a copy and does not execute arbitrary tests. Automatic screenshots are for public HTTPS pages. Without rated history an agent records ideas as observations instead of rules. The cost estimate compares against public API prices and is not a billing promise. GitHub sync is optional and uses only the single-repository token you create.",
     "screenshots": [
+      {
+        "src": "static/store/video-desktop.png",
+        "alt": "The launch video player on desktop: a full-screen dark player with an 'Official launch video' bar and Close button, a pixel-art guild hall scene with the subtitle 'Every agent starts as a stranger.' and the credit 'By Via Creativa Studio for Möbius · Music: Gregor Quendel, CC BY 4.0'.",
+        "label": "Official launch video"
+      },
       {
         "src": "static/store/guild-quest-desktop.png",
         "alt": "Guild Hall on desktop: a pixel-art guild room with lit rooms and resting characters, and beside it the 'Send on quest' panel for the Researcher with model picker, topic field and a 'Review cost & send' button.",
         "label": "Send agents on quests from the Guild Hall"
-      },
-      {
-        "src": "static/store/guild-desktop.png",
-        "alt": "Guild Hall on desktop: a stone hall with windows, banners and torches, a hearth and rug, and eight rooms such as Library, Guardhouse, Studio and Triage bay with animated props.",
-        "label": "A guild room built from real runs"
       },
       {
         "src": "static/store/settings-desktop.png",
@@ -170,5 +171,9 @@
     ]
   },
   "author": "arminzimic9-gif",
-  "license": "MIT"
+  "license": "MIT",
+  "static_assets": {
+    "launch-video.mp4": "assets/launch-video.mp4",
+    "CREDITS.txt": "assets/CREDITS.txt"
+  }
 }

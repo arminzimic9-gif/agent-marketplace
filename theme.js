@@ -325,8 +325,8 @@ p.am-note.am-mono { font-size:10px; }
   .am-hero-inner { padding:0 18px 22px; }
   .am-hero-labels { gap:14px; margin-bottom:14px; font-size:10px; }
   .am-hero h1 { font-size:clamp(42px, 12.5vw, 60px); }
-  .am-hero-actions .am-pill { flex:1; justify-content:space-between; }
-  .am-hero-actions .am-ghost { flex:1; }
+  .am-hero-actions .am-pill { flex:1 1 100%; justify-content:space-between; }
+  .am-hero-actions .am-ghost { flex:1 1 calc(50% - 6px); padding:0 12px; white-space:nowrap; }
   .am-hero-stats { margin-top:30px; }
   .am-hero-stats dd { font-size:22px; }
   .am-hero-stats div { padding-right:10px; } .am-hero-stats div + div { padding-left:12px; }
